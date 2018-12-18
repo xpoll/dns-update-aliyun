@@ -15,12 +15,6 @@
     </properties>
 
     <dependencies>
-        <!-- guava -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>23.0</version>
-        </dependency>
         <!-- http-request -->
         <dependency>
             <groupId>com.github.kevinsawicki</groupId>
