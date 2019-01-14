@@ -96,23 +96,26 @@ public class DemoListDomains {
         accessKeySecret = args[2];
         
         client = new DefaultAcsClient(DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret));
-        
-        if ("query".equals(dotype)) {
-            show(client);
-        } else if ("update".equals(dotype)) {
-            
-            IP_URL = args[3];
-            IP_CODE = args[4];
-            recordId = args[5];
-            
-            DescribeDomainRecordInfoResponse response = describeDomainRecordInfo(client, recordId);
-            String rr = response.getRR(), type = response.getType(), value = response.getValue();
-            String body = HttpRequest.get(IP_URL).body();
-            String ip = JSONObject.parseObject(body).getString(IP_CODE);
-            System.out.println(String.format("时间: %s, 原IP: %s, 现IP: %s, %s", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), value, ip, ip.equals(value) ? "不需要更新" : "需要更新"));
-            if (!ip.equals(value)) {
-                System.out.println(updateDomainRecord(client, recordId, rr, type, ip) ? "更新成功" : "更新失败");
+        while (true) {
+            if ("query".equals(dotype)) {
+                show(client);
+            } else if ("update".equals(dotype)) {
+                
+                IP_URL = args[3];
+                IP_CODE = args[4];
+                recordId = args[5];
+                
+                DescribeDomainRecordInfoResponse response = describeDomainRecordInfo(client, recordId);
+                String rr = response.getRR(), type = response.getType(), value = response.getValue();
+                String body = HttpRequest.get(IP_URL).body();
+                String ip = JSONObject.parseObject(body).getString(IP_CODE);
+                System.out.println(String.format("时间: %s, 原IP: %s, 现IP: %s, %s", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), value, ip, ip.equals(value) ? "不需要更新" : "需要更新"));
+                if (!ip.equals(value)) {
+                    System.out.println(updateDomainRecord(client, recordId, rr, type, ip) ? "更新成功" : "更新失败");
+                }
             }
+            
+            Thread.sleep(30000L);
         }
     }
 
